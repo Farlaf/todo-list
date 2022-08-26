@@ -1,5 +1,8 @@
 import React from "react";
+
 import { Header } from "./components/Header/Header";
+import { ToDoPanel } from "./components/ToDoPanel/ToDoPanel";
+
 import styles from "./App.module.css";
 
 const DEFAILT_TODO_LIST = [
@@ -21,6 +24,7 @@ function App() {
         <div className={styles.app_container}>
             <div className={styles.container}>
                 <Header todoCount={todos.length} />
+                <ToDoPanel />
             </div>
         </div>
     );

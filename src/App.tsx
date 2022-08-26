@@ -1,6 +1,6 @@
 import React from "react";
-
-import "./App.css";
+import { Header } from "./components/Header/Header";
+import styles from "./App.module.css";
 
 const DEFAILT_TODO_LIST = [
     { id: 1, name: "task 1", description: "description 1", checked: false },
@@ -15,11 +15,13 @@ const DEFAILT_TODO_LIST = [
 ];
 
 function App() {
-    console.log("@todos", DEFAILT_TODO_LIST);
+    const [todos, setTodos] = React.useState(DEFAILT_TODO_LIST);
 
     return (
-        <div className="{styles.app_container}">
-            <div className="{styles.container}">todo</div>
+        <div className={styles.app_container}>
+            <div className={styles.container}>
+                <Header todoCount={todos.length} />
+            </div>
         </div>
     );
 }

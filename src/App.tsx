@@ -20,11 +20,23 @@ const DEFAILT_TODO_LIST = [
 function App() {
     const [todos, setTodos] = React.useState(DEFAILT_TODO_LIST);
 
+    const addTodo = ({ name, description }: Omit<Todo, "checked" | "id">) => {
+        setTodos([
+            ...todos,
+            {
+                id: todos[todos.length - 1].id + 1,
+                description,
+                name,
+                checked: false,
+            },
+        ]);
+    };
+
     return (
         <div className={styles.app_container}>
             <div className={styles.container}>
                 <Header todoCount={todos.length} />
-                <ToDoPanel />
+                <ToDoPanel addTodo={addTodo} />
             </div>
         </div>
     );

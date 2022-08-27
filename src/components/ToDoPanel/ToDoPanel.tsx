@@ -1,4 +1,6 @@
 import React from "react";
+import { Button } from "../Button/Button";
+
 import styles from "./ToDoPanel.module.css";
 
 const DEFAULT_TODO_ITEM = {
@@ -6,14 +8,24 @@ const DEFAULT_TODO_ITEM = {
     description: "",
 };
 
-export const ToDoPanel = () => {
-    const [todo, setTodo] = React.useState(DEFAULT_TODO_ITEM);
+interface ToDoPanelProps {
+    addTodo: ({ name, description }: Omit<Todo, "checked" | "id">) => void;
+}
 
-    console.log("@todo", todo);
+export const ToDoPanel: React.FC<ToDoPanelProps> = ({ addTodo }) => {
+    const [todo, setTodo] = React.useState(DEFAULT_TODO_ITEM);
 
     const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
         setTodo({ ...todo, [name]: value });
+    };
+
+    const onClickAdd = () => {
+        addTodo({
+            name: todo.name,
+            description: todo.description,
+        });
+        setTodo(DEFAULT_TODO_ITEM);
     };
 
     return (
@@ -45,7 +57,9 @@ export const ToDoPanel = () => {
                 </div>
             </div>
             <div className={styles.button_container}>
-                <button>Add</button>
+                <Button color="blue" onClick={onClickAdd}>
+                    Add
+                </Button>
             </div>
         </div>
     );

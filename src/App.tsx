@@ -2,6 +2,7 @@ import React from "react";
 
 import { Header } from "./components/Header/Header";
 import { ToDoPanel } from "./components/ToDoPanel/ToDoPanel";
+import { TodoList } from "./components/TodoList/TodoList";
 
 import styles from "./App.module.css";
 
@@ -37,6 +38,7 @@ function App() {
             <div className={styles.container}>
                 <Header todoCount={todos.length} />
                 <ToDoPanel addTodo={addTodo} />
+                <TodoList todos={todos} />
             </div>
         </div>
     );

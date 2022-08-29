@@ -20,6 +20,13 @@ const DEFAILT_TODO_LIST = [
 
 function App() {
     const [todos, setTodos] = React.useState(DEFAILT_TODO_LIST);
+    const [todoIdForEdit, setTodoIdForEdit] = React.useState<Todo["id"] | null>(
+        null
+    );
+
+    const selectTodoIdForEdit = (id: Todo["id"]) => {
+        setTodoIdForEdit(id);
+    };
 
     const addTodo = ({ name, description }: Omit<Todo, "checked" | "id">) => {
         setTodos([
@@ -49,15 +56,34 @@ function App() {
         setTodos(todos.filter((todo) => todo.id !== id));
     };
 
+    const changeTodo = ({
+        name,
+        description,
+    }: Omit<Todo, "checked" | "id">) => {
+        setTodos(
+            todos.map((todo) => {
+                if (todo.id === todoIdForEdit) {
+                    return { ...todo, name, description };
+                }
+
+                return todo;
+            })
+        );
+        setTodoIdForEdit(null);
+    };
+
     return (
         <div className={styles.app_container}>
             <div className={styles.container}>
                 <Header todoCount={todos.length} />
-                <ToDoPanel addTodo={addTodo} />
+                <ToDoPanel mode="add" addTodo={addTodo} />
                 <TodoList
+                    todoIdForEdit={todoIdForEdit}
                     todos={todos}
                     checkTodo={checkTodo}
                     removeTodo={removeTodo}
+                    selectTodoIdForEdit={selectTodoIdForEdit}
+                    changeTodo={changeTodo}
                 />
             </div>
         </div>

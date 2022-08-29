@@ -8,23 +8,42 @@ const DEFAULT_TODO_ITEM = {
     description: "",
 };
 
-interface ToDoPanelProps {
+interface AddToDoPanelProps {
+    mode: "add";
     addTodo: ({ name, description }: Omit<Todo, "checked" | "id">) => void;
 }
 
-export const ToDoPanel: React.FC<ToDoPanelProps> = ({ addTodo }) => {
-    const [todo, setTodo] = React.useState(DEFAULT_TODO_ITEM);
+interface EditToDoPanelProps {
+    mode: "edit";
+    editTodo: Omit<Todo, "id" | "checked">;
+    changeTodo: ({ name, description }: Omit<Todo, "checked" | "id">) => void;
+}
+
+type ToDoPanelProps = AddToDoPanelProps | EditToDoPanelProps;
+
+export const ToDoPanel: React.FC<ToDoPanelProps> = (props) => {
+    const isEdit = props.mode === "edit";
+
+    const [todo, setTodo] = React.useState(
+        isEdit ? props.editTodo : DEFAULT_TODO_ITEM
+    );
 
     const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
         setTodo({ ...todo, [name]: value });
     };
 
-    const onClickAdd = () => {
-        addTodo({
+    const onClick = () => {
+        const todoItem = {
             name: todo.name,
             description: todo.description,
-        });
+        };
+
+        if (isEdit) {
+            return props.changeTodo(todoItem);
+        }
+
+        props.addTodo(todoItem);
         setTodo(DEFAULT_TODO_ITEM);
     };
 
@@ -57,9 +76,17 @@ export const ToDoPanel: React.FC<ToDoPanelProps> = ({ addTodo }) => {
                 </div>
             </div>
             <div className={styles.button_container}>
-                <Button color="blue" onClick={onClickAdd}>
-                    Add
-                </Button>
+                {!isEdit && (
+                    <Button color="blue" onClick={onClick}>
+                        Add
+                    </Button>
+                )}
+
+                {isEdit && (
+                    <Button color="orange" onClick={onClick}>
+                        Save
+                    </Button>
+                )}
             </div>
         </div>
     );

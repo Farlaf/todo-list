@@ -1,48 +1,37 @@
 import React from "react";
 import { ToDoPanel } from "../ToDoPanel/ToDoPanel";
 import { TodoItem } from "./TodoItem/TodoItem";
+import { useTodo } from "../../utils/contextes/useTodo";
 
-interface TodoListProps {
-    todos: Todo[];
-    todoIdForEdit: Todo["id"] | null;
-    checkTodo: (id: Todo["id"]) => void;
-    removeTodo: (id: Todo["id"]) => void;
-    selectTodoIdForEdit: (id: Todo["id"]) => void;
-    changeTodo: ({ name, description }: Omit<Todo, "checked" | "id">) => void;
-}
+export const TodoList: React.FC = () => {
+    const { todos, todoIdForEdit, checkTodo, removeTodo, selectTodoIdForEdit } =
+        useTodo();
 
-export const TodoList: React.FC<TodoListProps> = ({
-    todos,
-    checkTodo,
-    removeTodo,
-    selectTodoIdForEdit,
-    changeTodo,
-    todoIdForEdit,
-}) => (
-    <div>
-        {todos.map((todo) => {
-            if (todo.id === todoIdForEdit)
+    return (
+        <div>
+            {todos.map((todo) => {
+                if (todo.id === todoIdForEdit)
+                    return (
+                        <ToDoPanel
+                            mode="edit"
+                            key={todo.id}
+                            editTodo={{
+                                name: todo.name,
+                                description: todo.description,
+                            }}
+                        />
+                    );
+
                 return (
-                    <ToDoPanel
-                        mode="edit"
+                    <TodoItem
                         key={todo.id}
-                        changeTodo={changeTodo}
-                        editTodo={{
-                            name: todo.name,
-                            description: todo.description,
-                        }}
+                        todo={todo}
+                        checkTodo={checkTodo}
+                        removeTodo={removeTodo}
+                        selectTodoIdForEdit={selectTodoIdForEdit}
                     />
                 );
-
-            return (
-                <TodoItem
-                    key={todo.id}
-                    todo={todo}
-                    checkTodo={checkTodo}
-                    removeTodo={removeTodo}
-                    selectTodoIdForEdit={selectTodoIdForEdit}
-                />
-            );
-        })}
-    </div>
-);
+            })}
+        </div>
+    );
+};

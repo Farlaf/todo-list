@@ -1,5 +1,6 @@
 import React from "react";
 import { Button } from "../Button/Button";
+import { useTodo } from "../../utils/contextes/useTodo";
 
 import styles from "./ToDoPanel.module.css";
 
@@ -10,18 +11,18 @@ const DEFAULT_TODO_ITEM = {
 
 interface AddToDoPanelProps {
     mode: "add";
-    addTodo: ({ name, description }: Omit<Todo, "checked" | "id">) => void;
 }
 
 interface EditToDoPanelProps {
     mode: "edit";
     editTodo: Omit<Todo, "id" | "checked">;
-    changeTodo: ({ name, description }: Omit<Todo, "checked" | "id">) => void;
 }
 
 type ToDoPanelProps = AddToDoPanelProps | EditToDoPanelProps;
 
 export const ToDoPanel: React.FC<ToDoPanelProps> = (props) => {
+    const { changeTodo, addTodo } = useTodo();
+
     const isEdit = props.mode === "edit";
 
     const [todo, setTodo] = React.useState(
@@ -40,10 +41,10 @@ export const ToDoPanel: React.FC<ToDoPanelProps> = (props) => {
         };
 
         if (isEdit) {
-            return props.changeTodo(todoItem);
+            return changeTodo(todoItem);
         }
 
-        props.addTodo(todoItem);
+        addTodo(todoItem);
         setTodo(DEFAULT_TODO_ITEM);
     };
 

@@ -5,9 +5,10 @@ import styles from "./TodoItem.module.css";
 
 interface TodoItemProps {
     todo: Todo;
+    checkTodo: (id: Todo["id"]) => void;
 }
 
-export const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
+export const TodoItem: React.FC<TodoItemProps> = ({ todo, checkTodo }) => {
     return (
         <div className={styles.todo_item_container}>
             <div
@@ -17,6 +18,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
                     textDecoration: todo.checked ? "line-through" : "none",
                 }}
                 className={styles.todo_item_title}
+                onClick={() => checkTodo(todo.id)}
             >
                 {todo.name}
             </div>

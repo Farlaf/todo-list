@@ -6,9 +6,14 @@ import styles from "./TodoItem.module.css";
 interface TodoItemProps {
     todo: Todo;
     checkTodo: (id: Todo["id"]) => void;
+    removeTodo: (id: Todo["id"]) => void;
 }
 
-export const TodoItem: React.FC<TodoItemProps> = ({ todo, checkTodo }) => {
+export const TodoItem: React.FC<TodoItemProps> = ({
+    todo,
+    checkTodo,
+    removeTodo,
+}) => {
     return (
         <div className={styles.todo_item_container}>
             <div
@@ -27,7 +32,9 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo, checkTodo }) => {
             </div>
             <div className={styles.todo_item_btn_container}>
                 <Button color="orange">EDIT</Button>
-                <Button color="red">REMOVE</Button>
+                <Button color="red" onClick={() => removeTodo(todo.id)}>
+                    REMOVE
+                </Button>
             </div>
         </div>
     );
